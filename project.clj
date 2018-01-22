@@ -3,10 +3,10 @@
   :url "https://github.com/ejschoen/clj-tape.git"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :repositories {"sonatype" {:url "http://oss.sonatype.org/content/repositories/releases"
+  :repositories {"sonatype" {:url "https://oss.sonatype.org/content/repositories/releases"
                              :snapshots false
                              :releases {:checksum :fail :update :always}}
-                 "sonatype-snapshots" {:url "http://oss.sonatype.org/content/repositories/snapshots"
+                 "sonatype-snapshots" {:url "https://oss.sonatype.org/content/repositories/snapshots"
                                        :snapshots true
                                        :releases {:checksum :fail :update :always}}}
   :dependencies [[org.clojure/clojure "1.6.0"]
