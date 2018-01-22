@@ -28,7 +28,7 @@ A Clojure library that wraps Square's (persistent) queue-related [Tape](https://
 Tape provides file queues, which persist byte arrays, and object queues, which wrap file queues
 with a converter that serializes and deserializes objects to and from byte arrays.  For Clojure,
 file queues and object queues offer the same capabilities.  In clj-tape, serialization and
-deserialization use JSON [SMILE](https://en.wikipedia.org/wiki/Smile_(data_interchange_format),
+deserialization use JSON [SMILE](https://en.wikipedia.org/wiki/Smile_(data_interchange_format)),
 as implemented by Cheshire.
 
 clj-tape defines a `Converter` protocol:
