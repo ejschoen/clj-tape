@@ -24,6 +24,17 @@
       (remove! queue)
       (is (is-empty? queue)))))
 
+(deftest in-queue-file-test
+  (let [file (io/as-file "queue-test")]
+    (.deleteOnExit file)
+    (let [queue (make-queue file)]
+      (is (is-empty? queue))
+      (put! queue "Hello")
+      (is (not (is-empty? queue)))
+      (is (= "Hello" (peek queue)))
+      (remove! queue)
+      (is (is-empty? queue)))))
+
 (deftest many-entries-test
   (let [file (io/as-file "queue-test")
         n 1000]
@@ -33,6 +44,7 @@
       (doseq [i (range n)]
         (put! queue "Hello"))
       (println "puts done")
+      (is (= n (count (peek queue n))))
       (let [end-put (System/nanoTime)]
         (doseq [i (range n)]
           (do (is (= "Hello" (peek queue)))
@@ -42,3 +54,8 @@
           (println n "puts took" (float (/ (- end-put start) 1000000000)) "seconds.")
           (println n "gets took" (float (/ (- end end-put) 1000000000)) "seconds."))))) )
         
+(deftest persistence-test
+  (let [queue (make-queue "test/resources/test-queue")]
+    (is (not (is-empty? queue)))
+    (is (= 1 (size queue)))
+    (close! queue)))

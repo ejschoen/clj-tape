@@ -1,6 +1,6 @@
 # clj-tape
 
-A Clojure library that wraps Square's queue-related Tape classes.
+A Clojure library that wraps Square's queue-related [Tape](https://github.com/square/tape) classes.  For serialization, the library uses [Cheshire](https://github.com/dakrone/cheshire)'s SMILE serialization.
 
 ## Usage
 
@@ -20,6 +20,7 @@ Leiningen dependencies
 Make a queue
 
 ```clojure
+(def file-queue (clj-tape/make-queue "my-file-queue"))
 (def in-memory-queue (clj-tape/make-object-queue))
 (def persistent-queue (clj-tape/make-object-queue "my-queue-file"))
 ```
@@ -28,12 +29,14 @@ Queue operations
 
 ```clojure
 (put! persistent-queue "Hello")
-(peek persistent-queue)
-(peek persistent-queue 10)
+(= "Hello" (peek persistent-queue))
+(= 1 (size persistent-queue))
+(for [item (peek persistent-queue 10)] ...)
 (remove! persistent-queue)
 (remove! persistent-queue 10)
 (is-empty? persistent-queue)
 (clear! persistent-queue)
+(close! persistent-queue)
 ```
 
 ## License
