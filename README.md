@@ -26,6 +26,7 @@ Queue operations
 (remove! persistent-queue 10)
 (is-empty? persistent-queue)
 (clear! persistent-queue)
+```
 
 ## License
 
