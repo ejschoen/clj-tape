@@ -6,6 +6,8 @@ A Clojure library that wraps Square's queue-related [Tape](https://github.com/sq
 
 Leiningen dependencies
 
+[[https://travis-ci.org/ejschoen/clj-tape.svg?branch=master]]
+
 ```clojure
 [org.clojars.ejschoen/clj-tape "0.1.0"]
 ```
