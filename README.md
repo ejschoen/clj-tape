@@ -6,7 +6,10 @@ A Clojure library that wraps Square's queue-related Tape classes.
 
 Leiningen dependencies
 
-[![Clojars Project]](https://clojars.org/org,clojars.ejschoen/clj-tape)
+```clojure
+[org.clojars.ejschoen/clj-tape "0.1.0"]
+```
+
 
 
 ```clojure
