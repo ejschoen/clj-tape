@@ -28,20 +28,20 @@ Make a queue
 Queue operations
 
 ```clojure
-(put! persistent-queue "Hello")
-(= "Hello" (peek persistent-queue))
-(= 1 (size persistent-queue))
-(for [item (peek persistent-queue 10)] ...)
-(remove! persistent-queue)
-(remove! persistent-queue 10)
-(is-empty? persistent-queue)
-(clear! persistent-queue)
-(close! persistent-queue)
+(clj-tape/put! persistent-queue "Hello")
+(= "Hello" (clj-tape/peek persistent-queue))
+(= 1 (clj-tape/size persistent-queue))
+(for [item (clj-tape/peek persistent-queue 10)] ...)
+(clj-tape/remove! persistent-queue)
+(clj-tape/remove! persistent-queue 10)
+(clj-tape/is-empty? persistent-queue)
+(clj-tape/clear! persistent-queue)
+(clj-tape/close! persistent-queue)
 ```
 
 ## License
 
-Copyright © 2018 i2kConnect LLC
+Copyright © 2018 Eric Schoen
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
