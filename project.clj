@@ -1,4 +1,4 @@
-(defproject i2kconnect/clj-tape "0.1.0"
+(defproject org.clojars.ejschoen/clj-tape "0.1.0"
   :description "Clojure wrapper for Tape"
   :url "https://github.com/ejschoen/clj-tape.git"
   :license {:name "Eclipse Public License"

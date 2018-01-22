@@ -4,6 +4,10 @@ A Clojure library that wraps Square's queue-related Tape classes.
 
 ## Usage
 
+Leiningen dependencies
+
+
+
 ```clojure
 (ns your.namespace
   (:require [clj-tape.core :as clj-tape]))
