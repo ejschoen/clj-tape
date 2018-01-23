@@ -1,5 +1,4 @@
 (ns clj-tape.core-test
-  (:import [java.io File])
   (:require [clojure.java.io :as io])
   (:require [clojure.test :refer :all]
             [clj-tape.core :as clj-tape]))
@@ -16,6 +15,8 @@
 (deftest in-file-test
   (let [file (io/as-file "queue-test")]
     (.deleteOnExit file)
+    (when (.exists file)
+      (.delete file))
     (let [queue (clj-tape/make-object-queue file)]
       (is (clj-tape/is-empty? queue))
       (clj-tape/put! queue "Hello")
@@ -27,6 +28,8 @@
 (deftest in-queue-file-test
   (let [file (io/as-file "queue-test")]
     (.deleteOnExit file)
+    (when (.exists file)
+      (.delete file))
     (let [queue (clj-tape/make-queue file)]
       (is (clj-tape/is-empty? queue))
       (clj-tape/put! queue "Hello")
@@ -39,6 +42,8 @@
   (let [file (io/as-file "queue-test")
         n 1000]
     (.deleteOnExit file)
+    (when (.exists file)
+      (.delete file))
     (let [queue (clj-tape/make-object-queue file)
           start (System/nanoTime)]
       (doseq [i (range n)]

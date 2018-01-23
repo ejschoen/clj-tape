@@ -9,7 +9,7 @@ A Clojure library that wraps Square's (persistent) queue-related [Tape](https://
 ![Travis-CI build status](https://travis-ci.org/ejschoen/clj-tape.svg?branch=master)
 
 ```clojure
-[org.clojars.ejschoen/clj-tape "0.1.0"]
+[org.clojars.ejschoen/clj-tape "0.2.0"]
 ```
 
 ```clojure
@@ -61,6 +61,31 @@ Custom serialization and deserialization is possible with file queues:
 (clj-tape/clear! persistent-queue)
 (clj-tape/close! persistent-queue)
 ```
+
+### Blocking operations
+
+Tape's queue's do not support blocking on peek or remove.  For multi-threaded scenarios akin to
+Clojure's core.async channels, clj-tape supports a blocking wrapper that allows threads to wait
+for items to appear on the queue, while other threads generate items to place on the queue.
+
+```clojure
+(def blocking-queue (clj-tape.blocking/make-blocking-queue
+                      (clj-tape.core/make-queue "my-blocking-queue")
+                      :timeout 100))
+(future (Thread/sleep 1000) (clj-tape.core/put! blocking-queue "Hello"))
+(is (= :timeout (clj-tape.core/take! blocking-queue)))
+(Thread/sleep 1000)
+(is (= "Hello" (clj-tape.core/peek blocking-queue)))
+(clj-tape.core/remove! blocking-queue)
+(future (Thread/sleep 10) (clj-tape.core/close! blocking-queue))
+(is (thrown? Exception (clj-tape.core/peek blocking-queue)))
+```
+
+### Multi-threaded readers and writers
+
+Blocking queues can be used with multiple readers and writers.  Use `take!` instead of `peek` and `remove` to
+atomically take from a queue.  `take!` does not time out, and returns nil when the queue is closed.  Note that
+`take!` is only available with clj-tape's blocking queues.
 
 ## License
 
