@@ -83,8 +83,8 @@ for items to appear on the queue, while other threads generate items to place on
 
 ### Multi-threaded readers and writers
 
-Blocking queues can be used with multiple readers and writers.  Use `take!` instead of `peek` and `remove` to
-atomically take from a queue.  `take!` does not time out, and returns nil when the queue is closed.  Note that
+Blocking queues can be used with multiple readers and writers.  Use `take!` instead of `peek` and `remove!` to
+atomically take from a queue.  `take!` does not time out, and returns `nil` when the queue is closed.  Note that
 `take!` is only available with clj-tape's blocking queues.
 
 ## License
