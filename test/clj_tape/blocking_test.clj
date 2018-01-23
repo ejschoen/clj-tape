@@ -21,7 +21,7 @@
     (clj-tape/remove! queue)
     (is (clj-tape/is-empty? queue))
     (let [f1 (future (Thread/sleep 10) (clj-tape/close! queue))]
-      (is (thrown? Exception (clj-tape/peek queue))))))
+      (is (nil? (clj-tape/peek queue) )))))
 
 (deftest many-entries-test
   (let [file (io/as-file "queue-test")
@@ -72,13 +72,13 @@
                                  (for [i-item (range)
                                        :let [message (clj-blocking/take! queue)]
                                        :while message]
-                                   (do (println (.getName (Thread/currentThread)) message)
+                                   (do #_(println (.getName (Thread/currentThread)) message)
                                        message)))))
               messages (sort (apply concat (map deref futures)))]
           (println "All futures are realized")
           (is (= n-items (count messages)))
           (map-indexed (fn [i m]
-                         (println m)
+                         #_(println m)
                          (is (= m (format "Message %04d" i))))
                        messages)
           (is (clj-tape/is-empty? queue))))))
