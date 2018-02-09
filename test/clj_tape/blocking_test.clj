@@ -23,6 +23,14 @@
     (let [f1 (future (Thread/sleep 10) (clj-tape/close! queue))]
       (is (nil? (clj-tape/peek queue) )))))
 
+(deftest timeout-test
+  (let [queue (clj-blocking/make-blocking-queue
+               (clj-tape/make-object-queue))]
+    (future (clj-tape/put! queue "Hello"))
+    (is (= "Hello" (clj-blocking/take! queue 500 :timeout)))
+    (is (= :timeout (clj-blocking/take! queue 500 :timeout)))))
+
+
 (deftest many-entries-test
   (let [file (io/as-file "queue-test")
         n 10]

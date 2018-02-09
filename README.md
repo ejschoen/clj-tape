@@ -73,7 +73,7 @@ for items to appear on the queue, while other threads generate items to place on
                       (clj-tape.core/make-queue "my-blocking-queue")
                       :timeout 100))
 (future (Thread/sleep 1000) (clj-tape.core/put! blocking-queue "Hello"))
-(is (= :timeout (clj-tape.core/take! blocking-queue)))
+(is (= :timeout (clj-tape.core/take! blocking-queue 100 :timeout)))
 (Thread/sleep 1000)
 (is (= "Hello" (clj-tape.core/peek blocking-queue)))
 (clj-tape.core/remove! blocking-queue)
@@ -84,8 +84,8 @@ for items to appear on the queue, while other threads generate items to place on
 ### Multi-threaded readers and writers
 
 Blocking queues can be used with multiple readers and writers.  Use `take!` instead of `peek` and `remove!` to
-atomically take from a queue.  `take!` does not time out, and returns `nil` when the queue is closed.  Note that
-`take!` is only available with clj-tape's blocking queues.
+atomically take from a queue.  `take!` can optionally time out, returning a designated timeout value, and returns `nil`
+when the queue is closed.  Note that `take!` is only available with clj-tape's blocking queues.
 
 ## License
 
