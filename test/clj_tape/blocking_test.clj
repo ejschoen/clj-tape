@@ -91,3 +91,13 @@
                        messages)
           (is (clj-tape/is-empty? queue))))))
 
+(deftest delete-test
+  (let [path "test/resources/to-be-deleted"]
+    (when (.exists (io/as-file path))
+      (.delete (io/as-file path))
+      (is (not (.exists (io/as-file path)))))
+    (let [queue (clj-blocking/make-blocking-queue (clj-tape/make-queue path))]
+      (println "Created queue.  File exists:" (.exists (io/as-file path)))
+      (is (.exists (io/as-file path)))
+      (.delete! queue)
+      (is (not (.exists (io/as-file path)))))))
