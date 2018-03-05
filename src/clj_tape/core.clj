@@ -13,7 +13,8 @@
   (remove! [_] [_ n] "Remove the first entry from the queue, or upto n entries in the queue.")
   (clear! [_] "Clear the queue of all entries.")
   (size [_] "Return count of items in queue")
-  (close! [_] "Close the queue."))
+  (close! [_] "Close the queue.")
+  (delete! [_] "Close the queue and delete its persistent backing file."))
 
 (defprotocol Converter
   (from [_ bytes] "Convert from byte array")
@@ -37,7 +38,12 @@
     (remove! [_ n] (.remove queue (int n)))
     (clear! [_] (.clear queue))
     (size [_] (.size queue))
-    (close! [_] (.close queue))))
+    (close! [_] (.close queue))
+    (delete! [_]
+      (.close queue)
+      (let [queue-file (.file queue)]
+        (when queue-file
+          (.delete (.file queue-file)))))))
 
 (defn- reify-queue
   [^QueueFile queue converter]
@@ -52,7 +58,8 @@
     (remove! [_ n] (.remove queue (int n)))
     (clear! [_] (.clear queue))
     (size [_] (.size queue))
-    (close! [_] (.close queue))))
+    (close! [_] (.close queue))
+    (delete! [_] (.close queue) (.delete (.file queue)))))
 
 (defn make-queue
   ([queue-file]

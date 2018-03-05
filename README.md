@@ -9,7 +9,7 @@ A Clojure library that wraps Square's (persistent) queue-related [Tape](https://
 ![Travis-CI build status](https://travis-ci.org/ejschoen/clj-tape.svg?branch=master)
 
 ```clojure
-[org.clojars.ejschoen/clj-tape "0.2.0"]
+[org.clojars.ejschoen/clj-tape "0.4.0"]
 ```
 
 ```clojure
@@ -60,6 +60,7 @@ Custom serialization and deserialization is possible with file queues:
 (clj-tape/is-empty? persistent-queue)
 (clj-tape/clear! persistent-queue)
 (clj-tape/close! persistent-queue)
+(clj-tape/delete! pesistent-queue)
 ```
 
 ### Blocking operations
@@ -69,6 +70,8 @@ Clojure's core.async channels, clj-tape supports a blocking wrapper that allows 
 for items to appear on the queue, while other threads generate items to place on the queue.
 
 ```clojure
+(ns your.namespace
+  (:require [clj-tape core blocking]))
 (def blocking-queue (clj-tape.blocking/make-blocking-queue
                       (clj-tape.core/make-queue "my-blocking-queue")
                       :timeout 100))
