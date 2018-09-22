@@ -32,36 +32,40 @@
 
 
 (deftest many-entries-test
-  (let [file (io/as-file "queue-test")
-        n 10]
-    (when (.exists file)
-      (.delete file))
-    (.deleteOnExit file)
-    (let [queue (clj-blocking/make-blocking-queue
-                 (clj-tape/make-queue file)
-                 :timeout 1000)]
-      (future (doseq [i (range n)]
-                (Thread/sleep (rand 100))
-                (clj-tape/put! queue (format "Message %d" i))))
-      (doseq [i (range n)]
-        (do (is (= (format "Message %d" i)
-                   (clj-tape/peek queue)))
-            (clj-tape/remove! queue)))
-      (is (clj-tape/is-empty? queue))
-      (clj-tape/close! queue))
-    (let [queue (clj-blocking/make-blocking-queue
-                 (clj-tape/make-queue file)
-                 :timeout 10)]
-      (future (doseq [i (range n)]
-                (Thread/sleep (rand 100))
-                (clj-tape/put! queue (format "Message %d" i))))
-      (let [all (clj-tape/as-list queue)]
-        (map-indexed (fn [i m]
-                       (is (= (format "Message %d" i) m)))
-                     all)
-        (clj-tape/remove! queue (count all))
-        (is (clj-tape/is-empty? queue))
-        (clj-tape/close! queue)))))
+  (let [filename "queue-test"
+        n 1000]
+    (try 
+      (do 
+        (when (.exists (io/as-file filename))
+          (.delete (io/as-file filename)))
+        (let [queue (clj-blocking/make-blocking-queue
+                     (clj-tape/make-queue (io/as-file filename))
+                     :timeout 1000)]
+          (future (doseq [i (range n)]
+                    (Thread/sleep (rand 10))
+                    (clj-tape/put! queue (format "Message %d" i))))
+          (doseq [i (range n)]
+            (do (is (= (format "Message %d" i)
+                       (clj-tape/peek queue)))
+                (clj-tape/remove! queue)))
+          (is (clj-tape/is-empty? queue))
+          (clj-tape/close! queue))
+        (.delete (io/as-file filename))
+        (let [queue (clj-blocking/make-blocking-queue
+                     (clj-tape/make-queue (io/as-file filename))
+                     :timeout 10)]
+          (future (doseq [i (range n)]
+                    (Thread/sleep (rand 100))
+                    (clj-tape/put! queue (format "Message %d" i))))
+          (let [all (clj-tape/as-list queue)]
+            (map-indexed (fn [i m]
+                           (is (= (format "Message %d" i) m)))
+                         all)
+            (clj-tape/remove! queue (count all))
+            (is (clj-tape/is-empty? queue))
+            (clj-tape/close! queue))))
+      (finally (when (.exists (io/as-file filename))
+                 (.delete (io/as-file filename)))))))
 
 (deftest multi-readers-test
     (let [n-items 100
