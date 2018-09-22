@@ -105,3 +105,7 @@
       (is (.exists (io/as-file path)))
       (.delete! queue)
       (is (not (.exists (io/as-file path)))))))
+
+(deftest test-empty-queue-zero-timeout-take
+  (let [queue (clj-blocking/make-blocking-queue (clj-tape/make-object-queue))]
+    (is (= :empty (clj-blocking/take! queue 0 :empty)))))

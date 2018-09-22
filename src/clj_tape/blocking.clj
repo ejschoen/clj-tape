@@ -12,13 +12,15 @@
          (or (nil? timeout) (integer? timeout))]}
   (let [closed (ref false)
         wait (fn [do-timeout & [wait-timeout]]
-               (loop []
-                 (.wait queue (or wait-timeout timeout))
-                 (cond @closed :closed
-                       (ctc/is-empty? queue) (if do-timeout :timeout
-                                                 (recur)
-                                                 )
-                     :else :ready)))]
+               (if (= 0 (or wait-timeout timeout))
+                 :timeout
+                 (loop []
+                   (.wait queue (or wait-timeout timeout))
+                   (cond @closed :closed
+                         (ctc/is-empty? queue) (if do-timeout :timeout
+                                                   (recur)
+                                                   )
+                         :else :ready))))]
     (reify
       ConcurrentQueue
       (is-closed? [_] @closed)
