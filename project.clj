@@ -9,4 +9,4 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [cheshire "5.5.0"]
                  [org.clojure/core.async "0.4.474"]
-                 [com.squareup.tape2/tape "2.0.0-20171208.175004-35"]])
+                 [com.squareup.tape2/tape "2.0.0-beta1"]])

@@ -109,9 +109,8 @@
       (ctc/close! [_]
         (dosync (ref-set closed true))
         (while (not (ctc/is-empty? queue))
-          (async/<!! notify-take-channel))
-        (ctc/close! queue)
-        )
+          (ctc/remove! queue))
+        (ctc/close! queue))
       (ctc/delete! [this]
         (ctc/close! this)
         (ctc/delete! queue))
