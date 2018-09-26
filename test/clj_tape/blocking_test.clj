@@ -77,6 +77,8 @@
         (future (do (doseq [i (range n-items)]
                       (do (Thread/sleep (rand 100))
                           (clj-tape/put! queue (format "Message %04d" i))))
+                    (while (> (clj-tape/size queue) 0)
+                      (Thread/sleep 10))
                     (clj-tape/close! queue)
                     (println "Thread" (.getName (Thread/currentThread)) ": Queue is closed")))
         (let [futures (for [i (range n-threads)]
