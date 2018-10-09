@@ -109,3 +109,14 @@
 (deftest test-empty-queue-zero-timeout-take
   (let [queue (clj-blocking/make-blocking-queue (clj-tape/make-object-queue))]
     (is (= :empty (clj-blocking/take! queue 0 :empty)))))
+
+(deftest test-block-forever
+  (let [queue (clj-blocking/make-blocking-queue (clj-tape/make-object-queue))
+        fut (future (clj-blocking/take! queue))]
+    (Thread/sleep 3000)
+    (is (not (realized? fut)))
+    (clj-tape/put! queue "Hello")
+    (Thread/sleep 500)
+    (is (realized? fut))
+    (is (= "Hello" @fut))
+  ))

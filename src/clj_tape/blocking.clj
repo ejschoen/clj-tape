@@ -15,7 +15,9 @@
                (if (= 0 (or wait-timeout timeout))
                  :timeout
                  (loop []
-                   (.wait queue (or wait-timeout timeout))
+                   (if do-timeout
+                     (.wait queue (or wait-timeout timeout))
+                     (.wait queue))
                    (cond @closed :closed
                          (ctc/is-empty? queue) (if do-timeout :timeout
                                                    (recur)
@@ -26,7 +28,7 @@
       (is-closed? [_] @closed)
       (take! [queue]
         (take! queue nil nil))
-      (take! [_  timeout timeout-val]
+      (take! [_  wait-timeout timeout-val]
         (if @closed
           nil
           (locking queue
@@ -37,7 +39,7 @@
                               (ctc/remove! queue)
                               val)])]
               (if (= :empty status)
-                (loop [status (wait true timeout)]
+                (loop [status (wait (or wait-timeout timeout) wait-timeout)]
                   (case status
                     :timeout timeout-val
                     :closed nil
@@ -49,7 +51,7 @@
                                                   [:timeout nil]))]
                              (if (= status :ready)
                                val
-                               (recur (wait true timeout))))))
+                               (recur (wait (or wait-timeout timeout) wait-timeout))))))
                 val)))))
       ctc/Queue
       (ctc/is-empty? [_] (ctc/is-empty? queue))
