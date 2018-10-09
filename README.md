@@ -9,7 +9,7 @@ A Clojure library that wraps Square's (persistent) queue-related [Tape](https://
 ![Travis-CI build status](https://travis-ci.org/ejschoen/clj-tape.svg?branch=master)
 
 ```clojure
-[org.clojars.ejschoen/clj-tape "0.4.2"]
+[org.clojars.ejschoen/clj-tape "0.4.3"]
 ```
 
 ```clojure
