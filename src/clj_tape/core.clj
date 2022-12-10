@@ -1,4 +1,5 @@
 (ns clj-tape.core
+  (:refer-clojure :exclude [peek])
   (:require [clojure.java.io :as io])
   (:require [cheshire.core :as cheshire])
   (:import [java.io ByteArrayInputStream OutputStream])
